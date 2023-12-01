@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<QCARInfo>
+    <TargetSet version="36.0" toolVersion="v6.1.2">
+        <ModelTarget name="aggieparkbench" targetId="fa175a80d32b4e29ad61b819bc55c9bf" version="13.0" toolVersion="v6.1.2" bbox="-1.167614 0.150358 -1.607345 1.091951 1.035821 1.581256" trackingMode="scan" upVector="0.0 1.0 0.0" optimizeTrackingFor="default" realisticTextures="yes" />
+    </TargetSet>
+    <Assembly name="aggieparkbench" assemblyId="74126c00fc5e454da036f59609f816de">
+        <Part name="aggieparkbench" translation="0 0 0" rotation="AD: 0 0 1 0" />
+        <EntryPoint name="(none)" trained="yes" />
+    </Assembly>
+</QCARInfo>

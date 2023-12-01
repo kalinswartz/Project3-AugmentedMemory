@@ -15,7 +15,6 @@ public class GPSController : MonoBehaviour
     private float KeyLatitude;
     private float KeyLongitude;
     private List<Vector2> GPS_Points;
-    //private List<Boolean> visited;
     private float threshold = 0.00015f; //if location is within range of gps
 
     // Start is called before the first frame update
@@ -79,6 +78,7 @@ public class GPSController : MonoBehaviour
     {
         if (Input.location.status == LocationServiceStatus.Running)
         {
+            resultValue.text = "";
             //read the data
             latitudeValue.text = Input.location.lastData.latitude.ToString();
             longitudeValue.text = Input.location.lastData.longitude.ToString();
@@ -164,21 +164,6 @@ public class GPSController : MonoBehaviour
             }
         }
         return closestBenchIndex;
-    }
-
-   public void checkLocation() //button function to check if in range of point
-    {
-        //check if in range, and remove from list
-        if (resultValue.text == ("I am within the range of point"))
-        {
-            //GPS_Points.Remove(GPS_Points[i]);
-            mapStatus.text = "Successfully visited point";
-       
-        }
-        else
-        {
-            mapStatus.text = "Have not visited any point";
-        }
     }
 
 }
