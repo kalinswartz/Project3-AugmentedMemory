@@ -15,24 +15,18 @@ public class GPSController : MonoBehaviour
     private float KeyLatitude;
     private float KeyLongitude;
     private List<Vector2> GPS_Points;
-    private List<Boolean> visited;
+    //private List<Boolean> visited;
     private float threshold = 0.00015f; //if location is within range of gps
 
     // Start is called before the first frame update
     void Start()
     {
         GPS_Points = new List<Vector2>();
-        GPS_Points.Add(new Vector2(30.61088f, -96.33717f)); //aggie park = 0
-        //ADD rudder fountain = 1
+        GPS_Points.Add(new Vector2(30.61101f, -96.337115f)); //aggie park = 0
+        GPS_Points.Add(new Vector2(30.6129917f, -96.3404589f));// rudder fountain = 1
         GPS_Points.Add(new Vector2(30.61608f, -96.34135f)); //century tree = 2
-        //ADD h2o fountain = 3
+        GPS_Points.Add(new Vector2(30.6178027f, -96.3405648f));//h2o fountain = 3
         GPS_Points.Add(new Vector2(30.61854f, -96.33802f)); //langford A = 4
-
-        //initialize visited list to all false
-        for (int i = 0; i < GPS_Points.Count; i++)
-        {
-            visited.Add(false);
-        }
 
         StartCoroutine(GPSLocalization());
     }
@@ -85,7 +79,6 @@ public class GPSController : MonoBehaviour
     {
         if (Input.location.status == LocationServiceStatus.Running)
         {
-            resultValue.text = "";
             //read the data
             latitudeValue.text = Input.location.lastData.latitude.ToString();
             longitudeValue.text = Input.location.lastData.longitude.ToString();
