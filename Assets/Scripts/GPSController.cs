@@ -148,6 +148,21 @@ public class GPSController : MonoBehaviour
         return distance;
     }
 
+    private double CalculateAngle(Vector2 location1, LocationInfo location2)
+    {
+        float lat1 = Mathf.Deg2Rad * location1.x;
+        float lon1 = Mathf.Deg2Rad * location1.y;
+        float lat2 = Mathf.Deg2Rad * location2.latitude;
+        float lon2 = Mathf.Deg2Rad * location2.longitude;
+
+        double x = Math.Cos(lat2 * Mathf.Deg2Rad) * Math.Sin((lon2 - lon1) * Mathf.Deg2Rad);
+        double y = Math.Cos(lat1 * Math.PI / 180) * Math.Sin(lat2 * Math.PI / 180) - Math.Sin(lat1 * Math.PI / 180) * Math.Cos(lat2 * Math.PI / 180) * Math.Cos((lon2 - lon1) * Math.PI / 180);
+
+        double radians =  Math.Atan2(x, y) * 180 / Math.PI;
+
+        return radians;
+    }
+
     public int getClosestBenchIndex()
     {
         int closestBenchIndex = 0;
@@ -166,4 +181,11 @@ public class GPSController : MonoBehaviour
         return closestBenchIndex;
     }
 
+    public Vector2 getVectorToNearestBench()
+    {
+        int index = getClosestBenchIndex();
+        float rads = (float)CalculateAngle(GPS_Points[index], Input.location.lastData);
+        float magnitude = CalculateDistance(GPS_Points[index], Input.location.lastData);
+        return new Vector3(Mathf.Sin(rads), Mathf.Cos(rads)) * magnitude;
+    }
 }
