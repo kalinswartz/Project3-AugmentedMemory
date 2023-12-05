@@ -186,6 +186,6 @@ public class GPSController : MonoBehaviour
         int index = getClosestBenchIndex();
         float rads = (float)CalculateAngle(GPS_Points[index], Input.location.lastData);
         float magnitude = CalculateDistance(GPS_Points[index], Input.location.lastData);
-        return new Vector3(Mathf.Sin(rads), Mathf.Cos(rads)) * magnitude;
+        return new Vector3(Mathf.Sin(rads), 0, Mathf.Cos(rads)) * magnitude;
     }
 }

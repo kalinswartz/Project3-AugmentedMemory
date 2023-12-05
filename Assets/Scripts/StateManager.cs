@@ -24,7 +24,7 @@ public class StateManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        cube.transform.forward = gps.getVectorToNearestBench();
+        cube.transform.forward = Vector3.Normalize(gps.getVectorToNearestBench());
         switch (currentState)
         {
             case State.StartScreen:
