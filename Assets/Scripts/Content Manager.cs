@@ -9,16 +9,16 @@ public class ContentManager : MonoBehaviour
     [SerializeField] public AudioClip soundscape;
     [SerializeField] public VideoClip memorySpeakerClip;
     
-    // Start is called before the first frame update
-    void Start()
+    void Update()
     {
         VideoPlayer memorySpeakerObject = GameObject.Find("MemoryVideo").GetComponent<VideoPlayer>();
         memorySpeakerObject.clip = memorySpeakerClip;
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        AudioSource soundscapeSource = AudioSource.FindObjectOfType<AudioSource>();
+        soundscapeSource.clip = soundscape;
+
+        VideoPlayer videoPanelObject = GameObject.Find("VideoPanel").GetComponent<VideoPlayer>();
+        videoPanelObject.clip = video;
+
     }
 }
