@@ -21,6 +21,7 @@ public class GPSController : MonoBehaviour
     public List<bool> GPS_Allowed;
     private float threshold = 0.00015f; //if location is within range of gps
     public LocationInfo lastLoc;
+
     
 
     // Start is called before the first frame update
@@ -103,8 +104,8 @@ public class GPSController : MonoBehaviour
         {
             resultValue.text = "";
             //read the data
-            //latitudeValue.text = Input.location.lastData.latitude.ToString();
-            //longitudeValue.text = Input.location.lastData.longitude.ToString();
+            latitudeValue.text = Input.location.lastData.latitude.ToString();
+            longitudeValue.text = Input.location.lastData.longitude.ToString();
 
             lastLoc = Input.location.lastData;
 
@@ -115,16 +116,23 @@ public class GPSController : MonoBehaviour
                 Mathf.Abs(GPS_Points[i].y) - threshold <= Mathf.Abs(Input.location.lastData.longitude) &&
                 Mathf.Abs(GPS_Points[i].y) + threshold >= Mathf.Abs(Input.location.lastData.longitude))
                 {
-
                     mapStatus.text = "At: " + GetBenchName(i);
-                    if (i == 0)
+
+                    if (sm.currentState == StateManager.State.Playing)
+                    {
+                        construction.gameObject.SetActive(false);
+                        break;
+                    }
+                    else if (i == 0)
                     {
                         construction.gameObject.SetActive(false);
                         sm.currentState = StateManager.State.InRange;
+                        break;
                     }
                     else
                     {
                         construction.gameObject.SetActive(true);
+                        break;
                     }
                 }
                 else
@@ -225,8 +233,8 @@ public class GPSController : MonoBehaviour
         float angleToBench = (float)CalculateAngle(GPS_Points[index], Input.location.lastData);
         Quaternion benchAngle = Quaternion.Euler(0.0f, northAngle.eulerAngles.y + angleToBench, 0.0f);
 
-        latitudeValue.text = angleToNorth.ToString();
-        longitudeValue.text = angleToBench.ToString();
+        //latitudeValue.text = angleToNorth.ToString();
+        //longitudeValue.text = angleToBench.ToString();
         return benchAngle;
     }
 }
