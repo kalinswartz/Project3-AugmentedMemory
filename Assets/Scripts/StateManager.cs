@@ -54,11 +54,13 @@ public class StateManager : MonoBehaviour
                 break;
 
             case State.Locating:
-                memory.Stop();
-                concert.Stop();
-                soundscape.Stop();
-                confetti.Stop();
-                arrow.gameObject.SetActive(true);
+                if (!startButton.isActiveAndEnabled) { 
+                    memory.Stop();
+                    concert.Stop();
+                    soundscape.Stop();
+                    confetti.Stop();
+                    arrow.gameObject.SetActive(true);
+                }
                 break;
 
             case State.InRange:
