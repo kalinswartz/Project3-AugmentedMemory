@@ -11141,10 +11141,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   arrow: {fileID: 1232753349}
-  gps: {fileID: 1570776195}
-  startButton: {fileID: 527757484}
   modelTarget: {fileID: 1150426572}
   cam: {fileID: 1094917385}
+  gps: {fileID: 1570776195}
+  startButton: {fileID: 527757484}
   currentState: 0
 --- !u!4 &837699990
 Transform:
@@ -11413,6 +11413,7 @@ GameObject:
   - component: {fileID: 1093052693}
   - component: {fileID: 1093052692}
   - component: {fileID: 1093052691}
+  - component: {fileID: 1093052695}
   m_Layer: 0
   m_Name: VideoPanel
   m_TagString: Untagged
@@ -11429,8 +11430,8 @@ Transform:
   m_GameObject: {fileID: 1093052689}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.97232205, z: -0, w: -0.23364495}
-  m_LocalPosition: {x: -1.254, y: 1.494, z: 0.538}
-  m_LocalScale: {x: 1, y: 0.6429045, z: 1}
+  m_LocalPosition: {x: -1.413, y: 1.494, z: -0.068}
+  m_LocalScale: {x: 1.2199007, y: 0.6429045, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1150426576}
@@ -11443,7 +11444,7 @@ VideoPlayer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1093052689}
   m_Enabled: 1
-  m_VideoClip: {fileID: 0}
+  m_VideoClip: {fileID: 32900000, guid: 3e05b434d4ac89847b0212c83677a3fd, type: 3}
   m_TargetCameraAlpha: 1
   m_TargetCamera3DLayout: 0
   m_TargetCamera: {fileID: 0}
@@ -11543,6 +11544,19 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1093052689}
   m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1093052695
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1093052689}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1cd37411f8896c9409aac1da7d713659, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cam: {fileID: 1094917385}
 --- !u!1 &1094917380
 GameObject:
   m_ObjectHideFlags: 0
@@ -11783,8 +11797,8 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1243316374}
-  - {fileID: 1093052690}
   - {fileID: 543303169}
+  - {fileID: 1093052690}
   - {fileID: 9058694}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -12385,7 +12399,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7f87bf4f2d2bc84fb2443a21c875106, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  video: {fileID: 0}
+  video: {fileID: 32900000, guid: 3e05b434d4ac89847b0212c83677a3fd, type: 3}
   soundscape: {fileID: 8300000, guid: 38822c937347254438a05a70d0466e6f, type: 3}
   memorySpeakerClip: {fileID: 32900000, guid: 54982933563255f48800190b8b66e2eb, type: 3}
   ps1: {fileID: 459248111}
