@@ -5829,6 +5829,7 @@ MonoBehaviour:
   locationStatus: {fileID: 615444034}
   stateManager: {fileID: 837699989}
   startInfo: {fileID: 465656969}
+  startButton: {fileID: 873207094}
 --- !u!4 &433342193
 Transform:
   m_ObjectHideFlags: 0

@@ -103,8 +103,8 @@ public class GPSController : MonoBehaviour
         {
             resultValue.text = "";
             //read the data
-            latitudeValue.text = Input.location.lastData.latitude.ToString();
-            longitudeValue.text = Input.location.lastData.longitude.ToString();
+            //latitudeValue.text = Input.location.lastData.latitude.ToString();
+            //longitudeValue.text = Input.location.lastData.longitude.ToString();
 
             lastLoc = Input.location.lastData;
 
@@ -225,8 +225,8 @@ public class GPSController : MonoBehaviour
         float angleToBench = (float)CalculateAngle(GPS_Points[index], Input.location.lastData);
         Quaternion benchAngle = Quaternion.Euler(0.0f, northAngle.eulerAngles.y + angleToBench, 0.0f);
 
-//        latitudeValue.text = northAngle.eulerAngles.y.ToString();
-//        longitudeValue.text = benchAngle.eulerAngles.y.ToString();
+        latitudeValue.text = angleToNorth.ToString();
+        longitudeValue.text = angleToBench.ToString();
         return benchAngle;
     }
 }

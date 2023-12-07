@@ -9,6 +9,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] public TextMeshProUGUI locationStatus;
     [SerializeField] public StateManager stateManager;
     [SerializeField] public TextMeshProUGUI startInfo;
+    [SerializeField] private TextMeshProUGUI startButton;
 
     // Start is called before the first frame update
     void Start()
@@ -26,8 +27,10 @@ public class UIManager : MonoBehaviour
                 startInfo.enabled = true;
                 break;
             case StateManager.State.Locating:
-                startInfo.enabled = false;
-                locationStatus.enabled = true;
+                if (!startButton.isActiveAndEnabled) { 
+                    startInfo.enabled = false;
+                    locationStatus.enabled = true;
+                }
                 break;
             case StateManager.State.InRange:
                 
