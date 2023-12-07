@@ -11,11 +11,14 @@ public class GPSController : MonoBehaviour
     [SerializeField] TextMeshProUGUI longitudeValue;
     [SerializeField] TextMeshProUGUI resultValue;
     [SerializeField] TextMeshProUGUI mapStatus;
+    [SerializeField] TextMeshProUGUI construction;
     [SerializeField] private Transform cam;
+    [SerializeField] private StateManager sm;
 
     private float KeyLatitude;
     private float KeyLongitude;
     private List<Vector2> GPS_Points;
+    public List<bool> GPS_Allowed;
     private float threshold = 0.00015f; //if location is within range of gps
     public LocationInfo lastLoc;
     
@@ -23,19 +26,36 @@ public class GPSController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        construction.gameObject.SetActive(false);
         GPS_Points = new List<Vector2>();
-         GPS_Points.Add(new Vector2(30.61101f, -96.337115f)); //aggie park = 0
-         GPS_Points.Add(new Vector2(30.6129917f, -96.3404589f));// rudder fountain = 1
-         GPS_Points.Add(new Vector2(30.61608f, -96.34135f)); //century tree = 2
-         GPS_Points.Add(new Vector2(30.6178027f, -96.3405648f));//h2o fountain = 3
-         GPS_Points.Add(new Vector2(30.61854f, -96.33802f)); //langford A = 4
+        GPS_Points.Add(new Vector2(30.61101f, -96.337115f)); //aggie park = 0
+        GPS_Points.Add(new Vector2(30.6129917f, -96.3404589f));// rudder fountain = 1
+        GPS_Points.Add(new Vector2(30.61608f, -96.34135f)); //century tree = 2
+        GPS_Points.Add(new Vector2(30.6178027f, -96.3405648f));//h2o fountain = 3
+        GPS_Points.Add(new Vector2(30.61854f, -96.33802f)); //langford A = 4
+        GPS_Allowed = new List<bool>();
+        GPS_Allowed.Add(true);
+        GPS_Allowed.Add(true);
+        GPS_Allowed.Add(true);
+        GPS_Allowed.Add(true);
+        GPS_Allowed.Add(true);
+
         StartCoroutine(GPSLocalization());
     }
 
     // Update is called once per frame
     void Update()
     {
-       
+        bool cont = false;
+        for(int i=0; i<GPS_Allowed.Count; i++)
+        {
+            if (GPS_Allowed[i]) cont = true;
+        }
+
+        if (!cont)
+        {
+            sm.currentState = StateManager.State.Done;
+        }
     }
 
     //threads - parallel execution path
@@ -95,10 +115,22 @@ public class GPSController : MonoBehaviour
                 Mathf.Abs(GPS_Points[i].y) - threshold <= Mathf.Abs(Input.location.lastData.longitude) &&
                 Mathf.Abs(GPS_Points[i].y) + threshold >= Mathf.Abs(Input.location.lastData.longitude))
                 {
+
                     mapStatus.text = "At: " + GetBenchName(i);
+                    if (i == 0)
+                    {
+                        construction.gameObject.SetActive(false);
+                        sm.currentState = StateManager.State.InRange;
+                    }
+                    else
+                    {
+                        construction.gameObject.SetActive(true);
+                    }
                 }
                 else
                 {
+                    construction.gameObject.SetActive(false);
+                    sm.currentState= StateManager.State.Locating;
                     mapStatus.text = "Go to: " + GetBenchName(getClosestBenchIndex());
                 }
             }
@@ -172,12 +204,14 @@ public class GPSController : MonoBehaviour
 
         for (int i = 1; i < GPS_Points.Count; i++)
         {
-            float distance = CalculateDistance(GPS_Points[i], Input.location.lastData);
+            if (GPS_Allowed[i]) { 
+                float distance = CalculateDistance(GPS_Points[i], Input.location.lastData);
 
-            if (distance < closestDistance)
-            {
-                closestBenchIndex = i;
-                closestDistance = distance;
+                if (distance < closestDistance)
+                {
+                    closestBenchIndex = i;
+                    closestDistance = distance;
+                }
             }
         }
         return closestBenchIndex;

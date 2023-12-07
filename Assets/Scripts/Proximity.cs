@@ -23,6 +23,6 @@ public class Proximity : MonoBehaviour
         {
             distance = 1;
         }
-        videoplayer.SetDirectAudioVolume(0, 1 / distance);
+        videoplayer.SetDirectAudioVolume(0, (.25f / distance));
     }
 }

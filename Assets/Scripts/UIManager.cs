@@ -38,7 +38,7 @@ public class UIManager : MonoBehaviour
               
                 break;
             case StateManager.State.Done:
-                
+                locationStatus.text = "All benches visited.";
                
                 break;
         }
