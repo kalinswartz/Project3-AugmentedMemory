@@ -69,10 +69,12 @@ public class StateManager : MonoBehaviour
                 break;
 
             case State.Playing:
+                concert.gameObject.SetActive(false);
                 arrow.gameObject.SetActive(false);
                 //check length of video, enable/disable depending on how far in
                 if(memory.time > 24.0)
                 {
+                    concert.gameObject.SetActive(true);
                     concert.Play();
                     confetti.Play();
                 }

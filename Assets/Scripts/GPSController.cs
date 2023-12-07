@@ -111,6 +111,10 @@ public class GPSController : MonoBehaviour
 
             for (int i = 0; i < GPS_Points.Count; i++)
             {
+                if (!GPS_Allowed[i])
+                {
+                    continue;
+                }
                 if (Mathf.Abs(GPS_Points[i].x) - threshold <= Mathf.Abs(Input.location.lastData.latitude) &&
                 Mathf.Abs(GPS_Points[i].x) + threshold >= Mathf.Abs(Input.location.lastData.latitude) &&
                 Mathf.Abs(GPS_Points[i].y) - threshold <= Mathf.Abs(Input.location.lastData.longitude) &&
