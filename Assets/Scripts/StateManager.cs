@@ -2,13 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using static UnityEngine.GraphicsBuffer;
 
 public class StateManager : MonoBehaviour
 {
-    public GameObject cube;
-    public GPSController gps;
+    [SerializeField] private GameObject arrow;
+    [SerializeField] private GameObject modelTarget;
+
+    [SerializeField] private Transform cam;
+    
+    [SerializeField] private GPSController gps;
+    
     [SerializeField] private Button startButton;
-    public GameObject modelTarget;
     public enum State
     {
         StartScreen,
@@ -22,27 +27,28 @@ public class StateManager : MonoBehaviour
     void Start()
     {
         currentState = State.StartScreen;
-        cube.gameObject.SetActive(false);
+        arrow.gameObject.SetActive(false);
         modelTarget.gameObject.SetActive(false);
     }
 
     // Update is called once per frame
     void Update()
     {
-        cube.transform.forward = Vector3.Normalize(gps.getVectorToNearestBench());
+        Quaternion rotation = gps.GetNearestBenchRotation();
+        arrow.transform.rotation = Quaternion.Slerp(arrow.transform.rotation, rotation, Time.deltaTime * 2);
         switch (currentState)
         {
             case State.StartScreen:
                 break;
             case State.Locating:
                 modelTarget.gameObject.SetActive(true);
-                cube.gameObject.SetActive(true);
+                arrow.gameObject.SetActive(true);
                 break;
             case State.InRange:
-                cube.gameObject.SetActive(true);
+                arrow.gameObject.SetActive(true);
                 break;
             case State.Playing:
-                cube.gameObject.SetActive(false);   
+                arrow.gameObject.SetActive(false);   
                 break;
             case State.Done:
                 break;

@@ -8,6 +8,8 @@ public class ContentManager : MonoBehaviour
     [SerializeField] public VideoClip video;
     [SerializeField] public AudioClip soundscape;
     [SerializeField] public VideoClip memorySpeakerClip;
+    [SerializeField] public ParticleSystem ps1;
+    [SerializeField] public ParticleSystem ps2;
     
     void Update()
     {

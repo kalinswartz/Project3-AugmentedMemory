@@ -11,29 +11,31 @@ public class GPSController : MonoBehaviour
     [SerializeField] TextMeshProUGUI longitudeValue;
     [SerializeField] TextMeshProUGUI resultValue;
     [SerializeField] TextMeshProUGUI mapStatus;
+    [SerializeField] private Transform cam;
 
     private float KeyLatitude;
     private float KeyLongitude;
     private List<Vector2> GPS_Points;
     private float threshold = 0.00015f; //if location is within range of gps
+    public LocationInfo lastLoc;
+    
 
     // Start is called before the first frame update
     void Start()
     {
         GPS_Points = new List<Vector2>();
-        GPS_Points.Add(new Vector2(30.61101f, -96.337115f)); //aggie park = 0
-        GPS_Points.Add(new Vector2(30.6129917f, -96.3404589f));// rudder fountain = 1
-        GPS_Points.Add(new Vector2(30.61608f, -96.34135f)); //century tree = 2
-        GPS_Points.Add(new Vector2(30.6178027f, -96.3405648f));//h2o fountain = 3
-        GPS_Points.Add(new Vector2(30.61854f, -96.33802f)); //langford A = 4
-
+         GPS_Points.Add(new Vector2(30.61101f, -96.337115f)); //aggie park = 0
+         GPS_Points.Add(new Vector2(30.6129917f, -96.3404589f));// rudder fountain = 1
+         GPS_Points.Add(new Vector2(30.61608f, -96.34135f)); //century tree = 2
+         GPS_Points.Add(new Vector2(30.6178027f, -96.3405648f));//h2o fountain = 3
+         GPS_Points.Add(new Vector2(30.61854f, -96.33802f)); //langford A = 4
         StartCoroutine(GPSLocalization());
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+       
     }
 
     //threads - parallel execution path
@@ -45,6 +47,7 @@ public class GPSController : MonoBehaviour
             yield break;
         }
 
+        Input.compass.enabled = true;
         Input.location.Start();
 
         int maxWait = 20;
@@ -82,6 +85,8 @@ public class GPSController : MonoBehaviour
             //read the data
             latitudeValue.text = Input.location.lastData.latitude.ToString();
             longitudeValue.text = Input.location.lastData.longitude.ToString();
+
+            lastLoc = Input.location.lastData;
 
             for (int i = 0; i < GPS_Points.Count; i++)
             {
@@ -150,17 +155,14 @@ public class GPSController : MonoBehaviour
 
     private double CalculateAngle(Vector2 location1, LocationInfo location2)
     {
-        float lat1 = Mathf.Deg2Rad * location1.x;
-        float lon1 = Mathf.Deg2Rad * location1.y;
-        float lat2 = Mathf.Deg2Rad * location2.latitude;
-        float lon2 = Mathf.Deg2Rad * location2.longitude;
-
+        float lat1 = Mathf.Deg2Rad * location2.latitude;
+        float lon1 = Mathf.Deg2Rad * location2.longitude;
+        float lat2 = Mathf.Deg2Rad * location1.x;
+        float lon2 = Mathf.Deg2Rad * location1.y;
         double x = Math.Cos(lat2 * Mathf.Deg2Rad) * Math.Sin((lon2 - lon1) * Mathf.Deg2Rad);
-        double y = Math.Cos(lat1 * Math.PI / 180) * Math.Sin(lat2 * Math.PI / 180) - Math.Sin(lat1 * Math.PI / 180) * Math.Cos(lat2 * Math.PI / 180) * Math.Cos((lon2 - lon1) * Math.PI / 180);
-
-        double radians =  Math.Atan2(x, y) * 180 / Math.PI;
-
-        return radians;
+        double y = Math.Cos(lat1 * Mathf.Deg2Rad) * Math.Sin(lat2 * Mathf.Deg2Rad) - Math.Sin(lat1 * Mathf.Deg2Rad) * Math.Cos(lat2 * Mathf.Deg2Rad) * Math.Cos((lon2 - lon1) * Mathf.Deg2Rad);
+        double degrees = Math.Atan2(x, y) * Mathf.Rad2Deg;
+        return degrees;
     }
 
     public int getClosestBenchIndex()
@@ -181,11 +183,16 @@ public class GPSController : MonoBehaviour
         return closestBenchIndex;
     }
 
-    public Vector2 getVectorToNearestBench()
+    public Quaternion GetNearestBenchRotation()
     {
         int index = getClosestBenchIndex();
-        float rads = (float)CalculateAngle(GPS_Points[index], Input.location.lastData);
-        float magnitude = CalculateDistance(GPS_Points[index], Input.location.lastData);
-        return new Vector3(Mathf.Sin(rads), 0, Mathf.Cos(rads)) * magnitude;
+        float angleToNorth = Input.compass.trueHeading;
+        Quaternion northAngle = Quaternion.Euler(0.0f, cam.rotation.eulerAngles.y - angleToNorth, 0.0f);
+        float angleToBench = (float)CalculateAngle(GPS_Points[index], Input.location.lastData);
+        Quaternion benchAngle = Quaternion.Euler(0.0f, northAngle.eulerAngles.y + angleToBench, 0.0f);
+
+//        latitudeValue.text = northAngle.eulerAngles.y.ToString();
+//        longitudeValue.text = benchAngle.eulerAngles.y.ToString();
+        return benchAngle;
     }
 }
