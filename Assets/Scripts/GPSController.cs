@@ -9,6 +9,9 @@ public class GPSController : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI latitudeValue;
     [SerializeField] TextMeshProUGUI longitudeValue;
+
+    [SerializeField] TextMeshProUGUI northValue;
+    [SerializeField] TextMeshProUGUI benchValue;
     [SerializeField] TextMeshProUGUI resultValue;
     [SerializeField] TextMeshProUGUI mapStatus;
     [SerializeField] TextMeshProUGUI construction;
@@ -211,10 +214,10 @@ public class GPSController : MonoBehaviour
 
     public int getClosestBenchIndex()
     {
-        int closestBenchIndex = 0;
-        float closestDistance = CalculateDistance(GPS_Points[0], Input.location.lastData);
+        int closestBenchIndex = 999;
+        float closestDistance = 99999999999.9f;
 
-        for (int i = 1; i < GPS_Points.Count; i++)
+        for (int i = 0; i < GPS_Points.Count; i++)
         {
             if (GPS_Allowed[i]) { 
                 float distance = CalculateDistance(GPS_Points[i], Input.location.lastData);
@@ -237,8 +240,8 @@ public class GPSController : MonoBehaviour
         float angleToBench = (float)CalculateAngle(GPS_Points[index], Input.location.lastData);
         Quaternion benchAngle = Quaternion.Euler(0.0f, northAngle.eulerAngles.y + angleToBench, 0.0f);
 
-        //latitudeValue.text = angleToNorth.ToString();
-        //longitudeValue.text = angleToBench.ToString();
+        northValue.text = angleToNorth.ToString();
+        benchValue.text = angleToBench.ToString();
         return benchAngle;
     }
 }

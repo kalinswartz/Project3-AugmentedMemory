@@ -32,13 +32,16 @@ public class StateManager : MonoBehaviour
         Done
     }
     public State currentState;
+    private bool concertOver;
     // Start is called before the first frame update
     void Start()
     {
+        concertOver = false;
         concert.loopPointReached += concertDone;
         memory.loopPointReached += memoryDone;
         currentState = State.StartScreen;
         arrow.gameObject.SetActive(false);
+        concert.gameObject.SetActive(false);
         modelTarget.gameObject.SetActive(false);
     }
 
@@ -66,17 +69,24 @@ public class StateManager : MonoBehaviour
             case State.InRange:
                 arrow.gameObject.SetActive(true);
                 modelTarget.gameObject.SetActive(true);
+                concert.gameObject.SetActive(false);
                 break;
 
             case State.Playing:
-                concert.gameObject.SetActive(false);
+
                 arrow.gameObject.SetActive(false);
                 //check length of video, enable/disable depending on how far in
-                if(memory.time > 24.0)
+                if(memory.time > 24.0 && !concertOver)
                 {
                     concert.gameObject.SetActive(true);
                     concert.Play();
                     confetti.Play();
+                }
+                else
+                {
+                    if (confetti.isPlaying){
+                        confetti.Pause();
+                    }
                 }
                 break;
 
@@ -103,11 +113,12 @@ public class StateManager : MonoBehaviour
 
     public void concertDone(VideoPlayer vp)
     {
+        concertOver = true;
         concert.gameObject.SetActive(false);
     }
     public void memoryDone(VideoPlayer vp)
     {
-        gps.GPS_Allowed[gps.getClosestBenchIndex()] = false;
+        gps.GPS_Allowed[0] = false;
         memory.gameObject.SetActive(false);
         modelTarget.SetActive(false);
         currentState = State.Locating;
